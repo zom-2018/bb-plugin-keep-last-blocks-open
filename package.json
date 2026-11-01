@@ -1,6 +1,6 @@
 {
   "name": "bb-plugin-keep-last-blocks-open",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Keeps the newest work blocks of a BB thread open and folds older ones. Counts are settings.",
   "license": "MIT",
   "type": "module",
@@ -12,7 +12,7 @@
     "name": "Keep Last Blocks Open",
     "description": "Keeps the newest 5 work blocks open while a thread runs, counted at every depth. After the final answer only the last block stays open. Counts and Thought handling are settings.",
     "branding": {
-      "icon": "ChevronsDownUp"
+      "icon": "ChevronDown"
     },
     "server": "./server.ts",
     "app": "./app.tsx"

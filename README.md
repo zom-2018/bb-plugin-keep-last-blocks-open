@@ -10,7 +10,7 @@ keeps its place are left alone.
 
 ## Settings
 
-Open the plugin's settings page (Tools → Installed plugins → Keep Last Blocks Open).
+Open the plugin's settings page (Settings → Installed plugins → Keep Last Blocks Open).
 
 | Setting | Default | Range | Meaning |
 | --- | --- | --- | --- |
