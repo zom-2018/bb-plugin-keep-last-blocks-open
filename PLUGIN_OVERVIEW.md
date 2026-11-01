@@ -1,8 +1,9 @@
 Keeps the newest work blocks of a thread open while the agent works, and folds
 the older ones.
 
-- While a thread runs, the last 5 blocks stay open (a group like "Ran 2
-  commands", or a single command).
+- While a thread runs, the newest 5 blocks stay open. Blocks are counted at
+  every depth: a group like "Ran 2 commands" and the commands inside it both
+  count.
 - When the final answer appears, only the last block stays open.
 - Blocks that fall out of the window fold again. Your own toggles on a block
   that keeps its place are left alone.

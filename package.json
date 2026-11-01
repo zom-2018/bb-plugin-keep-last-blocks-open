@@ -10,7 +10,7 @@
   },
   "bb": {
     "name": "Keep Last Blocks Open",
-    "description": "Keeps the last 5 work blocks open while a thread runs. After the final answer only the last block stays open. Counts and Thought handling are settings.",
+    "description": "Keeps the newest 5 work blocks open while a thread runs, counted at every depth. After the final answer only the last block stays open. Counts and Thought handling are settings.",
     "branding": {
       "icon": "ChevronsDownUp"
     },

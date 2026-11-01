@@ -1,9 +1,10 @@
 // Keeps the newest work blocks of each thread expanded and folds older ones.
 //
-// A block is a top-level timeline row with its own expand toggle: a work group
-// ("Ran 2 commands", "Explored 1 search"), a single command, a file edit, or a
-// reasoning ("Thought") row when countThoughts is on. Only these rows count
-// toward the quota. Rows nested in a block do not count and are left to bb.
+// A block is a timeline row with its own expand toggle at any depth: a work
+// group ("Ran 2 commands", "Explored 1 search") or a row inside one, a single
+// command, a file edit, or a reasoning ("Thought") row when countThoughts is on.
+// Blocks are counted in timeline order, nested ones included. A block that
+// holds a kept block opens to show it, but takes no slot of its own.
 //
 // Messages, turn markers and notices are never blocks: assistant and user
 // messages, "Worked for" turn rows, and error or warning rows.
@@ -108,7 +109,7 @@ export function keepLastBlocksOpen(): () => void {
   }
 
   function planPane(pane: Element, rows: HTMLElement[]) {
-    const blocks = topLevelBlocks(rows, config.countThoughts);
+    const blocks = blockRows(rows, config.countThoughts);
     if (blocks.length === 0) return;
 
     const newest = blocks[blocks.length - 1];
@@ -117,10 +118,20 @@ export function keepLastBlocksOpen(): () => void {
     const keep = answered ? config.answeredBlocks : config.runningBlocks;
     if (keep === 0) return;
 
-    const kept = new Set(blocks.slice(-keep).map((b) => b.row));
+    // The newest `keep` blocks at any depth take the slots. Their enclosing
+    // blocks open too, so the kept ones are visible, but they take no slot.
+    const kept = blocks.slice(-keep).map((b) => b.row);
+    const blockSet = new Set(blocks.map((b) => b.row));
+    const open = new Set<HTMLElement>(kept);
+    for (const row of kept) {
+      for (let p = row.parentElement; p && p !== pane; p = p.parentElement) {
+        if (blockSet.has(p as HTMLElement)) open.add(p as HTMLElement);
+      }
+    }
+
     for (const { row, toggle } of blocks) {
       const id = row.getAttribute(ROW) ?? "";
-      const want = kept.has(row);
+      const want = open.has(row);
       const prev = applied.get(id);
       if (prev && prev.row === row && prev.open === want) continue;
       applied.set(id, { row, open: want });
@@ -152,17 +163,14 @@ export function isBlockKind(kind: string, countThoughts: boolean): boolean {
   return !NOTICE_KINDS.has(kind) && !kind.startsWith("op:");
 }
 
-/** Top-level block rows in timeline order. Rows nested in a block are skipped. */
-function topLevelBlocks(rows: HTMLElement[], countThoughts: boolean): Block[] {
+/** Block rows at every depth, in timeline order. Closed groups hide their rows, so they are not listed. */
+function blockRows(rows: HTMLElement[], countThoughts: boolean): Block[] {
   const blocks: Block[] = [];
-  let outer: HTMLElement | null = null;
   for (const row of rows) {
-    if (outer?.contains(row)) continue;
     if (!isBlockKind(kindOf(row.getAttribute(ROW) ?? ""), countThoughts)) continue;
     const toggle = toggleOf(row);
     if (!toggle) continue;
     blocks.push({ row, toggle });
-    outer = row;
   }
   return blocks;
 }

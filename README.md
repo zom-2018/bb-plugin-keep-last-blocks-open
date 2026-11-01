@@ -3,9 +3,10 @@
 A BB plugin that keeps the newest work blocks of a thread expanded and folds
 the older ones.
 
-While a thread runs, the last **5** blocks stay open. When the final answer
-appears, only the **last block** stays open. Blocks that fall out of the window
-fold again. Your manual toggles on a block that keeps its place are left alone.
+While a thread runs, the newest **5** blocks stay open, counted across all
+levels. When the final answer appears, only the **last block** stays open. Blocks
+that fall out of the window fold again. Your manual toggles on a block that
+keeps its place are left alone.
 
 ## Settings
 
@@ -22,15 +23,21 @@ Changes apply at once; no reload is needed.
 
 ## What counts as a block
 
-A block is a top-level timeline row with its own expand toggle:
+A block is any timeline row with its own expand toggle, at any depth:
 
-- work groups such as "Ran 2 commands" or "Explored 1 search";
+- work groups such as "Ran 2 commands" or "Explored 1 search", and the rows
+  nested inside them;
 - single command, file-edit and provider rows;
 - "Thought" rows, when *Count Thought as a block* is on.
 
-Rows nested inside a block do not count toward the quota. Messages (yours and
-the agent's), "Worked for" turn markers, and error or warning notices are never
-blocks.
+Blocks are counted in timeline order across all levels. The newest N take the
+slots. A group that holds a kept block opens to show it, but it takes no slot
+of its own. For example, with the default 5, three groups of seven sub-blocks
+open the last five sub-blocks of the newest group, and that group opens with
+them.
+
+Messages (yours and the agent's), "Worked for" turn markers, and error or
+warning notices are never blocks.
 
 ## How it works
 
