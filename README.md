@@ -52,12 +52,14 @@ warning notices are never blocks.
 
 ## Limits
 
-- The plugin depends on bb's timeline markup. A bb release that renames those
-  attributes or the "Stop run" label turns the plugin into a no-op. It does not
-  throw.
-- It acts only on blocks bb renders in the timeline. A block inside a collapsed
-  group is not counted until its group is open.
-- Panes are handled separately, so a split view keeps each thread's own window.
+- The plugin depends on bb's timeline markup. A bb update that renames the
+  attributes or the "Stop run" label can make it stop acting, or act on the
+  wrong rows. Unknown markup is skipped rather than thrown, but not every
+  partial markup change has been tested.
+- A run stopped before its answer is not treated as a final answer. The
+  running count stays in place.
+- Each thread pane is planned on its own. A split view has not been tested
+  live.
 
 ## Development
 

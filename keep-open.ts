@@ -183,10 +183,20 @@ function toggleOf(row: HTMLElement): HTMLElement | null {
   return null;
 }
 
-/** True when an assistant message follows the row in timeline order. */
+/**
+ * True when the final answer follows the row: an assistant message, and no
+ * interruption anywhere after the row. A run stopped before its answer is not
+ * a final answer, even when an intermediate message came after the last block.
+ */
 function answerAfter(rows: HTMLElement[], row: HTMLElement): boolean {
   const at = rows.indexOf(row);
-  return rows.slice(at + 1).some((r) => kindOf(r.getAttribute(ROW) ?? "") === "assistant");
+  let answered = false;
+  for (const r of rows.slice(at + 1)) {
+    const kind = kindOf(r.getAttribute(ROW) ?? "");
+    if (kind === "op:thread-interrupted") return false;
+    if (kind === "assistant") answered = true;
+  }
+  return answered;
 }
 
 function clampInt(raw: unknown, fallback: number, min: number, max: number): number {
