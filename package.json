@@ -1,0 +1,29 @@
+{
+  "name": "bb-plugin-keep-last-blocks-open",
+  "version": "0.1.0",
+  "description": "Keeps the newest work blocks of a BB thread open and folds older ones. Counts are settings.",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "bb": ">=0.48",
+    "bbPluginSdk": ">=0.6.109"
+  },
+  "bb": {
+    "name": "Keep Last Blocks Open",
+    "description": "Keeps the last 5 work blocks open while a thread runs. After the final answer only the last block stays open. Counts and Thought handling are settings.",
+    "branding": {
+      "icon": "ChevronsDownUp"
+    },
+    "server": "./server.ts",
+    "app": "./app.tsx"
+  },
+  "devDependencies": {
+    "@get-bb/plugin-sdk": "0.6.109",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "typescript": "^5.7.0"
+  },
+  "dependencies": {
+    "zod": "^4.6.5"
+  }
+}
